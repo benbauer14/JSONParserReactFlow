@@ -4061,10 +4061,17 @@ function createMasterKeyIndex() {
     console.log(keyArray)
 }
 
-function createSubKeyIndex(){
+function createLinkDataArray(){
     for(let i = 0; i<keyArray.length; i++){
-
+        section = keyArray[i]["text"]
+        if(callflow["instructions"][i]["expectedResponses"] == undefined){
+            console.log(callflow["instructions"][i]["nextInstructionId"])
+        }else{
+            console.log(callflow["instructions"][i]["expectedResponses"])
+        }
+        
     }
 }
 
 createMasterKeyIndex()
+createLinkDataArray()
