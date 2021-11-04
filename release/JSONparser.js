@@ -53,6 +53,20 @@ function createGraphLinksModel(){
     let graphLinksModel = '{ "class": "go.GraphLinksModel",' + '\n' + '"copiesArrays": true,' + '\n' + '"copiesArrayObjects": true,' + '\n' + '"nodeDataArray": ' + JSON.stringify(keyArray) +',\n"linkDataArray": ' + JSON.stringify(linkDataArrray)+ "\n}"
     console.log(graphLinksModel)
     document.getElementById("mySavedModel").value = graphLinksModel
+    
 }
 
-createGraphLinksModel()
+function messageMe(key){
+    
+    let callflow = JSON.parse(document.getElementById("myCallFlow").value)
+
+    console.log("test" + key)
+    clickedObject = JSON.stringify(callflow["instructions"][findMasterKeyIndex(key)]["instructionVariants"])
+    console.log(clickedObject)
+
+  }
+
+  function playWav(wavefile){
+    var myAudio = new Audio('wavefiile');
+
+  }
