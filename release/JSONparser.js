@@ -1,6 +1,6 @@
 keyArray = []
 linkDataArrray = []
-
+//########## https://reactflow.dev/
 function createMasterKeyIndex(callflow) {
     keys = Object.values(callflow["instructions"])
     index = 0
@@ -61,12 +61,56 @@ function messageMe(key){
     let callflow = JSON.parse(document.getElementById("myCallFlow").value)
 
     console.log("test" + key)
-    clickedObject = JSON.stringify(callflow["instructions"][findMasterKeyIndex(key)]["instructionVariants"])
-    console.log(clickedObject)
-
+    console.log(waveVariants(key))
+    console.log(answersByMasterCatalogID())
   }
 
   function playWav(wavefile){
-    var myAudio = new Audio('wavefiile');
+    var myAudio = new Audio('wavefile');
 
   }
+  
+function waveVariants(key){
+    //function returns all wave files for a specific survey key in an object with language as the key and wave filenames in an array displaying 
+    //wav files in the order listed in the call flow
+
+    let callflow = JSON.parse(document.getElementById("myCallFlow").value)
+    instructionVariantArray = (callflow["instructions"][findMasterKeyIndex(key)]["instructionVariants"])
+    langWav = {}
+    if(instructionVariantArray != undefined){
+        for(let i = 0; i < instructionVariantArray.length; i++){
+            lang = instructionVariantArray[i]["language"]
+            //loop through all possible prompts in the flow and add all wav files
+            wavArray = []
+            for(let j = 0; j < instructionVariantArray[i]["prompts"].length; j++ ){
+                if(instructionVariantArray[i]["prompts"][j]["audioFile"] != undefined){
+                    wavArray.push(instructionVariantArray[i]["prompts"][j]["audioFile"])
+                }
+            }
+            langWav[lang] = wavArray
+        }
+    }   
+
+    return langWav
+}
+
+function answersByMasterCatalogID(){
+    //returns an object with the available masterCatalogIDs and the available answers in an array
+    let callflow = JSON.parse(document.getElementById("myCallFlow").value)
+    answers = {}
+    for(let i = 0; i < callflow["instructions"].length; i++){
+        if((callflow["instructions"][i]["expectedResponses"]) != undefined){
+            newQuestion = callflow["instructions"][i]["platformMetaData"]["masterCatalogueId"]
+            if(newQuestion in answers){
+                answerArray = answers[newQuestion]
+            }else{
+                answerArray = []
+            }
+            for(let j = 0; j < callflow["instructions"][i]["expectedResponses"].length; j++){
+                answerArray.push(callflow["instructions"][i]["expectedResponses"][j]["platformMetaData"]["masterCatalogueId"])
+            }
+            answers[newQuestion] = answerArray
+        }
+    }
+    return answers
+}
